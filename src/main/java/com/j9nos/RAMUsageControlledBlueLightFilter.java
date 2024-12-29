@@ -9,12 +9,25 @@ public final class RAMUsageControlledBlueLightFilter {
     private static final ExecutorService EXECUTOR = Executors.newSingleThreadExecutor();
 
     private final BlueLightController blueLightController;
+    private final int savedPercentage;
 
     public RAMUsageControlledBlueLightFilter(final BlueLightController blueLightController) {
         this.blueLightController = blueLightController;
+        savedPercentage = this.blueLightController.readPercentage();
     }
 
     public void activate() {
+        Runtime.getRuntime().addShutdownHook(new Thread(() -> {
+            try {
+                EXECUTOR.shutdownNow();
+                System.out.println("Bye!");
+                blueLightController.updatePercentage(savedPercentage);
+            } catch (final Exception e) {
+                e.printStackTrace();
+            }
+        }));
+
+
         EXECUTOR.submit(() -> {
             while (!Thread.currentThread().isInterrupted()) {
                 try {

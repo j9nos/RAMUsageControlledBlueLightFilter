@@ -2,12 +2,10 @@ package com.j9nos;
 
 
 public class Main {
-    public static void main(String[] args) throws InterruptedException {
+    public static void main(String[] args)  {
 
         final BlueLightController blueLightController = new BlueLightController();
-        blueLightController.turnOn();
-        Thread.sleep(5_000);
-        blueLightController.turnOff();
+        System.out.println(blueLightController.readPercentage());
 
     }
 }

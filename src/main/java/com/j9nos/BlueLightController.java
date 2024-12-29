@@ -27,6 +27,11 @@ public class BlueLightController {
     private static final String SETTINGS_KEY = initKey("settings");
     private static final String DATA = "Data";
 
+
+    private static final int STRENGTH_MIN = 1200;
+    private static final int STRENGTH_MAX = 6500;
+    private static final int STRENGTH_DIFFERENCE = STRENGTH_MIN - STRENGTH_MAX;
+
     private static String initKey(final String key) {
         return String.format(REGISTRY_KEY_TEMPLATE, key, key);
     }
@@ -105,6 +110,17 @@ public class BlueLightController {
         newState[18] = 0x13;
 
         updateState(newState);
+    }
+
+    public int readPercentage() {
+        final byte[] settings = settings();
+        final int[] bits = new int[]{
+                ((settings[35] - 0x80) / 2) & 0x3F,
+                ((settings[36] & 0xFF) << 6) - STRENGTH_MAX
+        };
+        final int combined = bits[0] | bits[1];
+        final double percentage = ((double) combined / STRENGTH_DIFFERENCE) / 0.01;
+        return (int) percentage;
     }
 
 

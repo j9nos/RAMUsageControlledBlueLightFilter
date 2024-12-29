@@ -1,11 +1,11 @@
 package com.j9nos;
 
+public final class Main {
+    private Main() {
+    }
 
-public class Main {
-    public static void main(String[] args)  {
-
-        final BlueLightController blueLightController = new BlueLightController();
-        blueLightController.writeFromPercentage(69);
-
+    public static void main(final String[] args) {
+        new RAMUsageControlledBlueLightFilter(new BlueLightController())
+                .activate();
     }
 }

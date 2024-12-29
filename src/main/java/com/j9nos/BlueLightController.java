@@ -5,6 +5,7 @@ import com.sun.jna.platform.win32.Win32Exception;
 import com.sun.jna.platform.win32.WinReg;
 
 import java.time.Instant;
+import java.util.Arrays;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -121,6 +122,17 @@ public class BlueLightController {
         final int combined = bits[0] | bits[1];
         final double percentage = ((double) combined / STRENGTH_DIFFERENCE) / 0.01;
         return (int) percentage;
+    }
+
+    public void writeFromPercentage(final int percentage) {
+        if (percentage < 0 || percentage > 100) {
+            throw new IllegalArgumentException("0-100");
+        }
+        final int strengthValue = (int) (STRENGTH_MAX + (STRENGTH_DIFFERENCE * (percentage * 0.01)));
+        final byte[] buffer = new byte[2];
+        buffer[0] = ((byte) (((strengthValue & 0x3F) * 2) + 0x80));
+        buffer[1] = ((byte) (strengthValue >> 6));
+        System.out.println(Arrays.toString(buffer));
     }
 
 

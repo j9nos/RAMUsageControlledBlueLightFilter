@@ -119,11 +119,7 @@ public final class BlueLightController {
 
     public int readPercentage() {
         final byte[] settings = readRegistry(SETTINGS_KEY);
-        final int[] bits = {
-                ((settings[35] - 0x80) / 2) & 0x3F,
-                ((settings[36] & 0xFF) << 6) - STRENGTH_MAX
-        };
-        final int combined = bits[0] | bits[1];
+        final int combined = ((settings[35] - 0x80) / 2) & 0x3F | ((settings[36] & 0xFF) << 6) - STRENGTH_MAX;
         final double percentage = ((double) combined / STRENGTH_DIFFERENCE) * 100;
         return (int) percentage;
     }

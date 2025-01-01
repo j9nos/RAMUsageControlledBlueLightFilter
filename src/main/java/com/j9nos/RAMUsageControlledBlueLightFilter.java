@@ -8,12 +8,12 @@ public final class RAMUsageControlledBlueLightFilter {
     private static final long POLLING_RATE = Duration.ofSeconds(2).toMillis();
     private static final ExecutorService EXECUTOR = Executors.newSingleThreadExecutor();
 
-    private final BlueLightController blueLightController;
+    private final BlueLightFilter blueLightFilter;
     private final int savedPercentage;
 
-    public RAMUsageControlledBlueLightFilter(final BlueLightController blueLightController) {
-        this.blueLightController = blueLightController;
-        savedPercentage = this.blueLightController.readPercentage();
+    public RAMUsageControlledBlueLightFilter(final BlueLightFilter blueLightController) {
+        this.blueLightFilter = blueLightController;
+        savedPercentage = this.blueLightFilter.readPercentage();
     }
 
     public void activate() {
@@ -21,7 +21,7 @@ public final class RAMUsageControlledBlueLightFilter {
             try {
                 EXECUTOR.shutdownNow();
                 System.out.println("Bye!");
-                blueLightController.updatePercentage(savedPercentage);
+                blueLightFilter.updatePercentage(savedPercentage);
             } catch (final Exception e) {
                 e.printStackTrace();
             }
@@ -33,7 +33,7 @@ public final class RAMUsageControlledBlueLightFilter {
                 try {
                     final int ramUsage = RAM.usage();
                     System.out.println("Current RAM Usage: " + ramUsage + "%");
-                    blueLightController.updatePercentage(ramUsage);
+                    blueLightFilter.updatePercentage(ramUsage);
 
                     Thread.sleep(POLLING_RATE);
                 } catch (final InterruptedException e) {

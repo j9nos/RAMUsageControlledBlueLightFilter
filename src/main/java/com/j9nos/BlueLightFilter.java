@@ -8,7 +8,7 @@ import java.time.Instant;
 import java.util.HashSet;
 import java.util.Set;
 
-public final class BlueLightController {
+public final class BlueLightFilter {
     private static final String OS_NAME_PROPERTY_KEY = "os.name";
     private static final Set<String> SUPPORTED_OPERATING_SYSTEMS = new HashSet<>(Set.of("Windows 10"));
     private static final WinReg.HKEY REGISTRY_ROOT = WinReg.HKEY_CURRENT_USER;
@@ -34,7 +34,7 @@ public final class BlueLightController {
         return String.format(REGISTRY_KEY_TEMPLATE, key, key);
     }
 
-    public BlueLightController() {
+    public BlueLightFilter() {
         final String operatingSystem = System.getProperty(OS_NAME_PROPERTY_KEY);
         if (null == operatingSystem || operatingSystem.isBlank()) {
             throw new IllegalArgumentException("Could not detect operating system.");
